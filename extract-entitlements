@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Usage: extract-entitlements <input-file-path> [output-file-path]
+# Usage: extract-entitlements <ipa-file-path> [output-directory]
 
 function printError() {
     echo "$(tput bold)$(tput setaf 1)extract-entitlements:$(tput sgr0) "$1
@@ -9,7 +9,7 @@ function printError() {
 # Validate arguments.
 if [ "$#" -lt 1 ]; then
     printError "Invalid number of arguments.\n"
-    echo "Usage: extract-entitlements <input-file-path> [output-file-path]"
+    echo "Usage: extract-entitlements <ipa-file-path> [output-directory]"
     echo "\nThe output file path argument is optional. If missing, the file will be placed in the current working directory.\n"
     exit -1
 fi
