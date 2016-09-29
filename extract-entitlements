@@ -65,7 +65,7 @@ fi
 
 # Generate the entitlements file.
 FULL_OUTPUT_PATH=$OUTPUT_DIRECTORY$(date +%s)-generated-entitlements.plist
-codesign -d --entitlements - $TEMPORARY_DIRECTORY/Payload/*.app > $FULL_OUTPUT_PATH
+codesign -d --entitlements :$FULL_OUTPUT_PATH $TEMPORARY_DIRECTORY/Payload/*.app
 
 # Notify of success.
 echo "$(tput bold)$(tput setaf 2)extract-entitlements:$(tput sgr0) Generated output file: "$FULL_OUTPUT_PATH
