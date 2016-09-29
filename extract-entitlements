@@ -63,10 +63,13 @@ if [ ! -d $TEMPORARY_DIRECTORY/Payload/*.app ]; then
     exit -1
 fi
 
-# Generate the entitlements file.
+# Generate a pseudorandom filename.
 FULL_OUTPUT_PATH=$OUTPUT_DIRECTORY$(date +%s)-generated-entitlements.plist
+
+# Generate the entitlements file.
 codesign -d --entitlements :$FULL_OUTPUT_PATH $TEMPORARY_DIRECTORY/Payload/*.app 1>$TEMPORARY_DIRECTORY/output 2>$TEMPORARY_DIRECTORY/error
 
+# Check the codesign exit code.
 if [ $? -eq 0 ]; then
     # Notify of success.
     echo "$(tput bold)$(tput setaf 2)extract-entitlements:$(tput sgr0) Generated "$FULL_OUTPUT_PATH
