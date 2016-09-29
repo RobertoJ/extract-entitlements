@@ -59,7 +59,11 @@ if [ ! -d $TEMPORARY_DIRECTORY/Payload/*.app ]; then
 fi
 
 # Generate the entitlements file.
-codesign -d --entitlements - $TEMPORARY_DIRECTORY/Payload/*.app > $OUTPUT_DIRECTORY/$(date +%s)-generated-entitlements.plist
+FULL_OUTPUT_PATH=$OUTPUT_DIRECTORY/$(date +%s)-generated-entitlements.plist
+codesign -d --entitlements - $TEMPORARY_DIRECTORY/Payload/*.app > $FULL_OUTPUT_PATH
+
+# Notify of success.
+echo "$(tput bold)$(tput setaf 2)extract-entitlements:$(tput sgr0) Generated output file: "$FULL_OUTPUT_PATH
 
 # Cleanup.
 rm -r $TEMPORARY_DIRECTORY
