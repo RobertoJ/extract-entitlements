@@ -1,0 +1,61 @@
+#!/bin/sh
+
+# Usage: extract-entitlements <input-file-path> [output-file-path]
+
+# Validate arguments.
+if [ "$#" -lt 1 ]; then
+    echo "extract-entitlements: Invalid number of arguments.\n";
+    echo "Usage: extract-entitlements <input-file-path> [output-file-path]";
+    echo "\nThe output file path argument is optional. If missing, the file will be placed in the current working directory.\n";
+    exit -1
+fi
+
+# The path to the IPA of interest.
+IPA_DIRECTORY=$1
+
+# Check if the IPA exists.
+if [ ! -f $IPA_DIRECTORY ]; then
+    echo "The IPA could not be found.";
+    exit -1
+fi
+
+# The directory of where to output the entitlements file.
+OUTPUT_DIRECTORY=$2
+
+# Default to the current working directory if no output directory is provided.
+if [ -z $OUTPUT_DIRECTORY ]; then
+    OUTPUT_DIRECTORY="."
+fi
+
+# Validate that the output directory exists.
+if [ ! -d $OUTPUT_DIRECTORY ]; then
+    echo "The output directory could not be found."
+    exit -1
+fi
+
+# Create a temporary working directory.
+TEMPORARY_DIRECTORY=$(mktemp -d -t extract-entitlements-tmp)
+
+# Unpackage the IPA into the temporary directory.
+unzip -q $IPA_DIRECTORY -d $TEMPORARY_DIRECTORY
+
+# Check for the Payload directory in the IPA.
+if [ ! -d $TEMPORARY_DIRECTORY/Payload ]; then
+    echo "The Payload directory is missing from the IPA archive."
+    rm -r $TEMPORARY_DIRECTORY
+    exit -1
+fi
+
+# Check for the *.app directory in the IPA.
+if [ ! -d $TEMPORARY_DIRECTORY/Payload/*.app ]; then
+    echo "The unpackaged IPA does not seem to contain a *.app. The contents are:"
+    ls $TEMPORARY_DIRECTORY/Payload
+    rm -r $TEMPORARY_DIRECTORY
+    exit -1
+fi
+
+# Generate the entitlements file.
+codesign -d --entitlements - $TEMPORARY_DIRECTORY/Payload/*.app > $OUTPUT_DIRECTORY/$(date +%s)-generated-entitlements.plist
+
+# Cleanup.
+rm -r $TEMPORARY_DIRECTORY
