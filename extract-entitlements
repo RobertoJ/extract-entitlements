@@ -37,6 +37,11 @@ if [ ! -d $OUTPUT_DIRECTORY ]; then
     exit -1
 fi
 
+# Check if the output directory does not end with a leading slash. If not, append it.
+if [ ! $OUTPUT_DIRECTORY == */ ]; then
+    OUTPUT_DIRECTORY=$OUTPUT_DIRECTORY/
+fi
+
 # Create a temporary working directory.
 TEMPORARY_DIRECTORY=$(mktemp -d -t extract-entitlements-tmp)
 
@@ -59,7 +64,7 @@ if [ ! -d $TEMPORARY_DIRECTORY/Payload/*.app ]; then
 fi
 
 # Generate the entitlements file.
-FULL_OUTPUT_PATH=$OUTPUT_DIRECTORY/$(date +%s)-generated-entitlements.plist
+FULL_OUTPUT_PATH=$OUTPUT_DIRECTORY$(date +%s)-generated-entitlements.plist
 codesign -d --entitlements - $TEMPORARY_DIRECTORY/Payload/*.app > $FULL_OUTPUT_PATH
 
 # Notify of success.
