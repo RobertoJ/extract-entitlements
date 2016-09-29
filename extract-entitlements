@@ -69,7 +69,7 @@ codesign -d --entitlements :$FULL_OUTPUT_PATH $TEMPORARY_DIRECTORY/Payload/*.app
 
 if [ $? -eq 0 ]; then
     # Notify of success.
-    echo "$(tput bold)$(tput setaf 2)extract-entitlements:$(tput sgr0) Generated output file: "$FULL_OUTPUT_PATH
+    echo "$(tput bold)$(tput setaf 2)extract-entitlements:$(tput sgr0) Generated "$FULL_OUTPUT_PATH
 else
     # Print out whatever the error was.
     printError "There was an error extracting the entitlements snapshot. Please review below."
