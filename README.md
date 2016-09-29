@@ -6,4 +6,4 @@ It's not perfect, but it does what I need which is to provide a snapshot of the 
 
 ## License
 
-[Unlicense](http://unlicense.org/)
+<a href="http://unlicense.org/" target="_blank">Unlicense</a>
