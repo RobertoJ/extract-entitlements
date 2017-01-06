@@ -69,6 +69,9 @@ FULL_OUTPUT_PATH=$OUTPUT_DIRECTORY$(date +%s)-generated-entitlements.plist
 # Generate the entitlements file.
 codesign -d --entitlements :$FULL_OUTPUT_PATH $TEMPORARY_DIRECTORY/Payload/*.app 1>$TEMPORARY_DIRECTORY/output 2>$TEMPORARY_DIRECTORY/error
 
+# Output an additional new line for safety.
+printf "\n" >> $FULL_OUTPUT_PATH
+
 # Check the codesign exit code.
 if [ $? -eq 0 ]; then
     # Notify of success.
